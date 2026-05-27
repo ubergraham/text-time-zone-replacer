@@ -23,7 +23,9 @@ npm install
 npm run build
 ```
 
-Then follow the Quick Action setup in [SHORTCUT.md](SHORTCUT.md).
+Then follow the Quick Action setup in [SHORTCUT.md](SHORTCUT.md), or the
+Raycast Script Command setup in
+[RAYCAST_SCRIPT_COMMAND.md](RAYCAST_SCRIPT_COMMAND.md).
 
 ## Usage
 
