@@ -7041,14 +7041,73 @@ function parseFallback(input, reference) {
 }
 
 // cli.ts
-var SOURCE_ZONE = "America/Los_Angeles";
-var TARGET_ZONE = "America/New_York";
-var SOURCE_LABEL = "PT";
-var TARGET_LABEL = "ET";
+var TIME_ZONE_ALIASES = /* @__PURE__ */ new Map([
+  ["PT", "America/Los_Angeles"],
+  ["PST", "America/Los_Angeles"],
+  ["PDT", "America/Los_Angeles"],
+  ["PACIFIC", "America/Los_Angeles"],
+  ["ET", "America/New_York"],
+  ["EST", "America/New_York"],
+  ["EDT", "America/New_York"],
+  ["EASTERN", "America/New_York"],
+  ["CT", "America/Chicago"],
+  ["CST", "America/Chicago"],
+  ["CDT", "America/Chicago"],
+  ["CENTRAL", "America/Chicago"],
+  ["MT", "America/Denver"],
+  ["MST", "America/Denver"],
+  ["MDT", "America/Denver"],
+  ["MOUNTAIN", "America/Denver"],
+  ["AK", "America/Anchorage"],
+  ["AKST", "America/Anchorage"],
+  ["AKDT", "America/Anchorage"],
+  ["HT", "Pacific/Honolulu"],
+  ["HST", "Pacific/Honolulu"],
+  ["UTC", "Etc/UTC"],
+  ["GMT", "Europe/London"],
+  ["UK", "Europe/London"],
+  ["LONDON", "Europe/London"],
+  ["CET", "Europe/Paris"],
+  ["CEST", "Europe/Paris"],
+  ["PARIS", "Europe/Paris"],
+  ["BERLIN", "Europe/Berlin"],
+  ["CST-CHINA", "Asia/Shanghai"],
+  ["CHINA", "Asia/Shanghai"],
+  ["JST", "Asia/Tokyo"],
+  ["TOKYO", "Asia/Tokyo"],
+  ["AEST", "Australia/Sydney"],
+  ["AEDT", "Australia/Sydney"],
+  ["SYDNEY", "Australia/Sydney"]
+]);
+var SOURCE_ZONE = resolveTimeZone(
+  process.env.SOURCE_ZONE || "America/Los_Angeles"
+);
+process.env.TZ = SOURCE_ZONE;
+var OUTPUT_ZONES = parseOutputZones(
+  process.env.OUTPUT_ZONES || "PT=PT,ET=ET"
+);
 function readInput() {
   const argInput = process.argv.slice(2).join(" ").trim();
   if (argInput) return argInput;
   return readFileSync(0, "utf8").trim();
+}
+function resolveTimeZone(value) {
+  const trimmed = value.trim();
+  const alias = TIME_ZONE_ALIASES.get(trimmed.toUpperCase());
+  return alias || trimmed;
+}
+function parseOutputZones(value) {
+  return value.split(/[;,]/).map((entry) => entry.trim()).filter(Boolean).map((entry) => {
+    const [label, ...zoneParts] = entry.split("=");
+    const displayLabel = label.trim();
+    const zoneInput = zoneParts.length ? zoneParts.join("=").trim() : label;
+    if (!displayLabel || !zoneInput.trim()) {
+      throw new Error(
+        `Invalid OUTPUT_ZONES entry "${entry}". Use LABEL=ZONE or ZONE.`
+      );
+    }
+    return { label: displayLabel, zone: resolveTimeZone(zoneInput) };
+  });
 }
 function compactTime(date, zone) {
   return formatInTimeZone(date, zone, "h:mma").toLowerCase().replace(":00", "");
@@ -7056,30 +7115,57 @@ function compactTime(date, zone) {
 function compactDayTime(date, zone) {
   return formatInTimeZone(date, zone, "EEE h:mma").replace(":00", "").toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
 }
-function formatTarget(input) {
-  const parsed = parseTimeInput(input);
+function formatConvertedZone(input, zone, parsed) {
+  if (zone.zone === SOURCE_ZONE) {
+    return `${input} (${zone.label})`;
+  }
+  return `${formatConvertedTime(parsed, zone.zone)} (${zone.label})`;
+}
+function formatConvertedTime(parsed, targetZone) {
   if (parsed.isRange) {
-    const sourceStartDay = formatInTimeZone(parsed.date, SOURCE_ZONE, "yyyy-MM-dd");
-    const targetStartDay = formatInTimeZone(parsed.date, TARGET_ZONE, "yyyy-MM-dd");
-    const sourceEndDay = formatInTimeZone(parsed.endDate, SOURCE_ZONE, "yyyy-MM-dd");
-    const targetEndDay = formatInTimeZone(parsed.endDate, TARGET_ZONE, "yyyy-MM-dd");
+    const sourceStartDay = formatInTimeZone(
+      parsed.date,
+      SOURCE_ZONE,
+      "yyyy-MM-dd"
+    );
+    const targetStartDay = formatInTimeZone(
+      parsed.date,
+      targetZone,
+      "yyyy-MM-dd"
+    );
+    const sourceEndDay = formatInTimeZone(
+      parsed.endDate,
+      SOURCE_ZONE,
+      "yyyy-MM-dd"
+    );
+    const targetEndDay = formatInTimeZone(
+      parsed.endDate,
+      targetZone,
+      "yyyy-MM-dd"
+    );
     const showStartDay = sourceStartDay !== targetStartDay;
     const showEndDay = sourceEndDay !== targetEndDay || targetStartDay !== targetEndDay;
-    const start = showStartDay ? compactDayTime(parsed.date, TARGET_ZONE) : compactTime(parsed.date, TARGET_ZONE);
-    const end = showEndDay ? compactDayTime(parsed.endDate, TARGET_ZONE) : compactTime(parsed.endDate, TARGET_ZONE);
-    return `${start}-${end} ${TARGET_LABEL}`;
+    const start = showStartDay ? compactDayTime(parsed.date, targetZone) : compactTime(parsed.date, targetZone);
+    const end = showEndDay ? compactDayTime(parsed.endDate, targetZone) : compactTime(parsed.endDate, targetZone);
+    return `${start}-${end}`;
   }
   const sourceDay = formatInTimeZone(parsed.date, SOURCE_ZONE, "yyyy-MM-dd");
-  const targetDay = formatInTimeZone(parsed.date, TARGET_ZONE, "yyyy-MM-dd");
-  const targetTime = sourceDay === targetDay ? compactTime(parsed.date, TARGET_ZONE) : compactDayTime(parsed.date, TARGET_ZONE);
-  return `${targetTime} ${TARGET_LABEL}`;
+  const targetDay = formatInTimeZone(parsed.date, targetZone, "yyyy-MM-dd");
+  return sourceDay === targetDay ? compactTime(parsed.date, targetZone) : compactDayTime(parsed.date, targetZone);
+}
+function replaceTimeZoneText(input) {
+  const trimmed = input.trim();
+  if (!trimmed) {
+    throw new Error("No selected text was provided.");
+  }
+  const parsed = parseTimeInput(trimmed);
+  return OUTPUT_ZONES.map(
+    (zone) => formatConvertedZone(trimmed, zone, parsed)
+  ).join(" / ");
 }
 function main() {
   const input = readInput();
-  if (!input) {
-    throw new Error("No selected text was provided.");
-  }
-  process.stdout.write(`${input} ${SOURCE_LABEL} / ${formatTarget(input)}`);
+  process.stdout.write(replaceTimeZoneText(input));
 }
 try {
   main();
