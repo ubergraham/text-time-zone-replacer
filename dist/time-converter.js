@@ -7092,6 +7092,9 @@ process.env.TZ = SOURCE_ZONE;
 var OUTPUT_ZONES = parseOutputZones(
   process.env.OUTPUT_ZONES || "PT=PT,ET=ET"
 );
+var REMOVE_PARENTHESES = parseBoolean(
+  process.env.REMOVE_PARENTHESES || "true"
+);
 var ALTERNATIVE_SEPARATOR_RE = /\s+\bor\b\s+/i;
 function readInput() {
   const argInput = process.argv.slice(2).join(" ").trim();
@@ -7116,6 +7119,9 @@ function parseOutputZones(value) {
     return { label: displayLabel, zone: resolveTimeZone(zoneInput) };
   });
 }
+function parseBoolean(value) {
+  return !["0", "false", "no", "off"].includes(value.trim().toLowerCase());
+}
 function compactTime(date, zone) {
   return formatInTimeZone(date, zone, "h:mma").toLowerCase().replace(":00", "");
 }
@@ -7139,11 +7145,14 @@ function formatAllZones(input) {
     " / "
   );
 }
+function formatZoneLabel(value, label) {
+  return REMOVE_PARENTHESES ? `${value} ${label}` : `${value} (${label})`;
+}
 function formatConvertedZone(input, zone) {
   if (zone.zone === SOURCE_ZONE) {
-    return `${input} (${zone.label})`;
+    return formatZoneLabel(input, zone.label);
   }
-  return `${formatConvertedInput(input, zone.zone)} (${zone.label})`;
+  return formatZoneLabel(formatConvertedInput(input, zone.zone), zone.label);
 }
 function formatConvertedInput(input, targetZone) {
   const alternatives = input.split(ALTERNATIVE_SEPARATOR_RE).map((part) => part.trim()).filter(Boolean);

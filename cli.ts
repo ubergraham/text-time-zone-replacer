@@ -52,6 +52,10 @@ const OUTPUT_ZONES = parseOutputZones(
   process.env.OUTPUT_ZONES || "PT=PT,ET=ET",
 );
 
+const REMOVE_PARENTHESES = parseBoolean(
+  process.env.REMOVE_PARENTHESES || "true",
+);
+
 interface OutputZone {
   label: string;
   zone: string;
@@ -91,6 +95,10 @@ function parseOutputZones(value: string): OutputZone[] {
     });
 }
 
+function parseBoolean(value: string): boolean {
+  return !["0", "false", "no", "off"].includes(value.trim().toLowerCase());
+}
+
 function compactTime(date: Date, zone: string): string {
   return formatInTimeZone(date, zone, "h:mma")
     .toLowerCase()
@@ -126,12 +134,16 @@ function formatAllZones(input: string): string {
   );
 }
 
+function formatZoneLabel(value: string, label: string): string {
+  return REMOVE_PARENTHESES ? `${value} ${label}` : `${value} (${label})`;
+}
+
 function formatConvertedZone(input: string, zone: OutputZone): string {
   if (zone.zone === SOURCE_ZONE) {
-    return `${input} (${zone.label})`;
+    return formatZoneLabel(input, zone.label);
   }
 
-  return `${formatConvertedInput(input, zone.zone)} (${zone.label})`;
+  return formatZoneLabel(formatConvertedInput(input, zone.zone), zone.label);
 }
 
 function formatConvertedInput(input: string, targetZone: string): string {

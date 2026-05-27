@@ -10,7 +10,7 @@ Weds 5pm
 becomes:
 
 ```text
-Weds 5pm (PT) / 8pm (ET)
+Weds 5pm PT / 8pm ET
 ```
 
 ## Setup
@@ -40,6 +40,7 @@ Edit the variables at the top of
 ```zsh
 SOURCE_ZONE="PT"
 OUTPUT_ZONES="PT, ET"
+REMOVE_PARENTHESES="true"
 ```
 
 `SOURCE_ZONE` controls how natural-language input is interpreted. For example,
@@ -54,6 +55,9 @@ OUTPUT_ZONES="PT, ET, CET"
 
 The source zone entry preserves the original selected text and adds its label.
 Other zones are formatted as converted times.
+
+`REMOVE_PARENTHESES` controls whether labels are shown as `PT` or `(PT)`.
+It is `true` by default.
 
 Common aliases include `PT`, `ET`, `CT`, `MT`, `UTC`, `GMT`, `CET`, and `JST`.
 Advanced users can also use full time zone names like `Europe/London`, or a

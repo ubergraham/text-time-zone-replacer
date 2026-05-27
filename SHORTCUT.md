@@ -12,7 +12,7 @@ Weds 5pm
 becomes:
 
 ```text
-Weds 5pm (PT) / 8pm (ET)
+Weds 5pm PT / 8pm ET
 ```
 
 ## Before You Start
@@ -82,11 +82,14 @@ Near the top, you will see:
 ```zsh
 SOURCE_ZONE="PT"
 OUTPUT_ZONES="PT, ET"
+REMOVE_PARENTHESES="true"
 ```
 
 `SOURCE_ZONE` means “how should the original text be interpreted?”
 
 `OUTPUT_ZONES` means “which time zones should be shown?”
+
+`REMOVE_PARENTHESES` means “show labels as `PT` instead of `(PT)`?”
 
 For example, to show Pacific, Eastern, and Central European Time:
 
@@ -102,7 +105,7 @@ Advanced users can also use full time zone names like `Europe/London`.
 Select `Weds 5pm`, run the Quick Action, and macOS should replace it with:
 
 ```text
-Weds 5pm (PT) / 8pm (ET)
+Weds 5pm PT / 8pm ET
 ```
 
 ![Using the Shortcut to replace selected text](use-shortcut.png)

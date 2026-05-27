@@ -13,6 +13,7 @@ set -euo pipefail
 # You can use short aliases such as PT, ET, CT, MT, UTC, GMT, CET, and JST.
 SOURCE_ZONE="PT"
 OUTPUT_ZONES="PT, ET"
+REMOVE_PARENTHESES="true"
 
 SCRIPT_DIR="${0:A:h}"
 REPO_DIR="${SCRIPT_DIR:h}"
@@ -40,7 +41,7 @@ fi
 
 replacement="$(
   cd "$REPO_DIR"
-  SOURCE_ZONE="$SOURCE_ZONE" OUTPUT_ZONES="$OUTPUT_ZONES" "$NODE_BIN" \
+  SOURCE_ZONE="$SOURCE_ZONE" OUTPUT_ZONES="$OUTPUT_ZONES" REMOVE_PARENTHESES="$REMOVE_PARENTHESES" "$NODE_BIN" \
     dist/time-converter.js "$selected_text"
 )"
 
