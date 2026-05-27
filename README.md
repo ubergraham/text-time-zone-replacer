@@ -119,6 +119,8 @@ Raycast should find a command named:
 Replace Selected Time Zones
 ```
 
+![Raycast Script Commands setup showing the time zone replacer command](raycast-script.png)
+
 ### Add a Keyboard Shortcut
 
 1. In Raycast, search for **Replace Selected Time Zones**.

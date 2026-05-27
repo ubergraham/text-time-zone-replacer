@@ -30,6 +30,8 @@ raycast-scripts
 
 Then assign a hotkey to `Replace Selected Time Zones`.
 
+![Raycast Script Commands setup showing the time zone replacer command](raycast-script.png)
+
 ## Configure Output Zones
 
 Edit the variables at the top of
