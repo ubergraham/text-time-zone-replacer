@@ -57,6 +57,8 @@ interface OutputZone {
   zone: string;
 }
 
+const ALTERNATIVE_SEPARATOR_RE = /\s+\bor\b\s+/i;
+
 function readInput(): string {
   const argInput = process.argv.slice(2).join(" ").trim();
   if (argInput) return argInput;
@@ -105,13 +107,27 @@ function compactDayTime(date: Date, zone: string): string {
 function formatConvertedZone(
   input: string,
   zone: OutputZone,
-  parsed: ReturnType<typeof parseTimeInput>,
 ): string {
   if (zone.zone === SOURCE_ZONE) {
     return `${input} (${zone.label})`;
   }
 
-  return `${formatConvertedTime(parsed, zone.zone)} (${zone.label})`;
+  return `${formatConvertedInput(input, zone.zone)} (${zone.label})`;
+}
+
+function formatConvertedInput(input: string, targetZone: string): string {
+  const alternatives = input
+    .split(ALTERNATIVE_SEPARATOR_RE)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (alternatives.length <= 1) {
+    return formatConvertedTime(parseTimeInput(input), targetZone);
+  }
+
+  return alternatives
+    .map((part) => formatConvertedTime(parseTimeInput(part), targetZone))
+    .join(" or ");
 }
 
 function formatConvertedTime(
@@ -167,10 +183,9 @@ function replaceTimeZoneText(input: string): string {
     throw new Error("No selected text was provided.");
   }
 
-  const parsed = parseTimeInput(trimmed);
-  return OUTPUT_ZONES.map((zone) =>
-    formatConvertedZone(trimmed, zone, parsed),
-  ).join(" / ");
+  return OUTPUT_ZONES.map((zone) => formatConvertedZone(trimmed, zone)).join(
+    " / ",
+  );
 }
 
 function main() {

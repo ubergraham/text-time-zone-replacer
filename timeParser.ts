@@ -39,7 +39,7 @@ const YEAR_RE = /\b\d{4}\b/;
  * earlier than the start time, one day is added to the end date.
  */
 export function parseTimeInput(input: string): ParseResult {
-  const trimmed = input.trim();
+  const trimmed = normalizeMeridiemShorthand(input.trim());
   const now = new Date();
   const includesDate = DATE_KEYWORD_RE.test(trimmed);
   const includesYear = YEAR_RE.test(trimmed);
@@ -108,6 +108,16 @@ export function parseTimeInput(input: string): ParseResult {
 
   // ── Single time ────────────────────────────────────────────────────────────
   return parseSingleTime(trimmed, includesDate, includesYear);
+}
+
+function normalizeMeridiemShorthand(input: string): string {
+  return input
+    .replace(
+      /\b(\d{1,2}(?::\d{2})?)\s*-\s*(\d{1,2}(?::\d{2})?)\s*([ap])\b/gi,
+      (_match, start: string, end: string, meridiem: string) =>
+        `${start}${meridiem} - ${end}${meridiem}`,
+    )
+    .replace(/\b(\d{1,2}(?::\d{2})?)\s*([ap])\b/gi, "$1$2m");
 }
 
 /**

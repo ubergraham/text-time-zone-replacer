@@ -6884,7 +6884,7 @@ var RANGE_SEPARATOR_RE = /\s*(?:–|—|\s+to\s+|\s+through\s+|\s+until\s+)\s*|(
 var DATE_KEYWORD_RE = /\b(today|tomorrow|yesterday|next|last|ago|on|january|february|march|april|may|june|july|august|september|october|november|december|monday|tuesday|wednesday|thursday|friday|saturday|sunday|jan|feb|mar|apr|jun|jul|aug|sep|oct|nov|dec|mon|tue|wed|thu|fri|sat|sun)\b/i;
 var YEAR_RE = /\b\d{4}\b/;
 function parseTimeInput(input) {
-  const trimmed = input.trim();
+  const trimmed = normalizeMeridiemShorthand(input.trim());
   const now2 = /* @__PURE__ */ new Date();
   const includesDate = DATE_KEYWORD_RE.test(trimmed);
   const includesYear = YEAR_RE.test(trimmed);
@@ -6932,6 +6932,12 @@ function parseTimeInput(input) {
     }
   }
   return parseSingleTime(trimmed, includesDate, includesYear);
+}
+function normalizeMeridiemShorthand(input) {
+  return input.replace(
+    /\b(\d{1,2}(?::\d{2})?)\s*-\s*(\d{1,2}(?::\d{2})?)\s*([ap])\b/gi,
+    (_match, start, end, meridiem) => `${start}${meridiem} - ${end}${meridiem}`
+  ).replace(/\b(\d{1,2}(?::\d{2})?)\s*([ap])\b/gi, "$1$2m");
 }
 function parseSingleTime(input, includesDate, includesYear) {
   const now2 = /* @__PURE__ */ new Date();
@@ -7086,6 +7092,7 @@ process.env.TZ = SOURCE_ZONE;
 var OUTPUT_ZONES = parseOutputZones(
   process.env.OUTPUT_ZONES || "PT=PT,ET=ET"
 );
+var ALTERNATIVE_SEPARATOR_RE = /\s+\bor\b\s+/i;
 function readInput() {
   const argInput = process.argv.slice(2).join(" ").trim();
   if (argInput) return argInput;
@@ -7115,11 +7122,18 @@ function compactTime(date, zone) {
 function compactDayTime(date, zone) {
   return formatInTimeZone(date, zone, "EEE h:mma").replace(":00", "").toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
 }
-function formatConvertedZone(input, zone, parsed) {
+function formatConvertedZone(input, zone) {
   if (zone.zone === SOURCE_ZONE) {
     return `${input} (${zone.label})`;
   }
-  return `${formatConvertedTime(parsed, zone.zone)} (${zone.label})`;
+  return `${formatConvertedInput(input, zone.zone)} (${zone.label})`;
+}
+function formatConvertedInput(input, targetZone) {
+  const alternatives = input.split(ALTERNATIVE_SEPARATOR_RE).map((part) => part.trim()).filter(Boolean);
+  if (alternatives.length <= 1) {
+    return formatConvertedTime(parseTimeInput(input), targetZone);
+  }
+  return alternatives.map((part) => formatConvertedTime(parseTimeInput(part), targetZone)).join(" or ");
 }
 function formatConvertedTime(parsed, targetZone) {
   if (parsed.isRange) {
@@ -7158,10 +7172,9 @@ function replaceTimeZoneText(input) {
   if (!trimmed) {
     throw new Error("No selected text was provided.");
   }
-  const parsed = parseTimeInput(trimmed);
-  return OUTPUT_ZONES.map(
-    (zone) => formatConvertedZone(trimmed, zone, parsed)
-  ).join(" / ");
+  return OUTPUT_ZONES.map((zone) => formatConvertedZone(trimmed, zone)).join(
+    " / "
+  );
 }
 function main() {
   const input = readInput();
