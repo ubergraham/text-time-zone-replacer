@@ -154,6 +154,8 @@ Open [SHORTCUT.md](SHORTCUT.md) and follow the steps there.
 
 ![Shortcut settings showing Use as Quick Action](setup-shortcut-add-quickaction.png)
 
+![macOS Keyboard Shortcuts settings showing the Shortcut assigned to a keyboard shortcut](mac-preferences-keyboard-shortcut.png)
+
 The setup is more manual than Raycast because Apple Shortcuts does not install
 from this repository automatically.
 

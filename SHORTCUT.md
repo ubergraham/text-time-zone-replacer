@@ -48,6 +48,8 @@ npm run build
 
 ![Shortcut settings showing Use as Quick Action](setup-shortcut-add-quickaction.png)
 
+![macOS Keyboard Shortcuts settings showing the Shortcut assigned to a keyboard shortcut](mac-preferences-keyboard-shortcut.png)
+
 ## Change the Time Zones
 
 Open this file:
