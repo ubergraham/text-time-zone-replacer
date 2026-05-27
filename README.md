@@ -155,13 +155,21 @@ from this repository automatically.
 
 ## Changing the Time Zones
 
-The Raycast version can be customized by editing this file:
+Both versions can be customized with the same two settings.
+
+For Raycast, edit this file:
 
 ```text
 raycast-scripts/replace-selected-time-zones.sh
 ```
 
-Near the top, you will see:
+For the macOS Shortcut, edit this file:
+
+```text
+shortcut-quick-action.sh
+```
+
+Near the top of either file, you will see:
 
 ```zsh
 SOURCE_ZONE="America/Los_Angeles"
