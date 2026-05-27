@@ -148,7 +148,18 @@ Services menu and can be assigned a keyboard shortcut.
 
 ### Install
 
-Open [SHORTCUT.md](SHORTCUT.md) and follow the steps there.
+The easiest way is to import the included Shortcut file:
+
+[Time Zone Replacer Shortcut.shortcut](<Time Zone Replacer Shortcut.shortcut>)
+
+1. Double-click `Time Zone Replacer Shortcut.shortcut`.
+2. Click **Add Shortcut** or **Set Up Shortcut** when the Shortcuts app opens.
+3. When prompted, choose the `shortcut-quick-action.sh` file inside this
+   downloaded project folder.
+4. In System Settings, assign a keyboard shortcut under
+   **Keyboard > Keyboard Shortcuts > Services**.
+
+Full instructions are in [SHORTCUT.md](SHORTCUT.md).
 
 ![Shortcut setup showing the Run Shell Script action](setup-shortcut.png)
 
@@ -156,8 +167,8 @@ Open [SHORTCUT.md](SHORTCUT.md) and follow the steps there.
 
 ![macOS Keyboard Shortcuts settings showing the Shortcut assigned to a keyboard shortcut](mac-preferences-keyboard-shortcut.png)
 
-The setup is more manual than Raycast because Apple Shortcuts does not install
-from this repository automatically.
+The Shortcut still uses the files in this folder. If you move or delete the
+folder later, you may need to set up the Shortcut again.
 
 ### Use It
 

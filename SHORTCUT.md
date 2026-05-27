@@ -25,7 +25,30 @@ npm install
 npm run build
 ```
 
-## Create the Shortcut
+## Install the Included Shortcut
+
+The easiest way to install is to use the included Shortcut file:
+
+[Time Zone Replacer Shortcut.shortcut](<Time Zone Replacer Shortcut.shortcut>)
+
+1. Double-click `Time Zone Replacer Shortcut.shortcut`.
+2. The Shortcuts app should open.
+3. Click **Add Shortcut** or **Set Up Shortcut**.
+4. When prompted, choose the `shortcut-quick-action.sh` file inside this
+   downloaded project folder.
+5. In System Settings, assign a keyboard shortcut under
+   **Keyboard > Keyboard Shortcuts > Services**.
+
+![Shortcut settings showing Use as Quick Action](setup-shortcut-add-quickaction.png)
+
+![macOS Keyboard Shortcuts settings showing the Shortcut assigned to a keyboard shortcut](mac-preferences-keyboard-shortcut.png)
+
+The Shortcut still uses the files in this folder. If you move or delete the
+folder later, you may need to set up the Shortcut again.
+
+## Manual Setup
+
+Use these steps only if you prefer to create the Shortcut yourself.
 
 1. Create a new shortcut named `Convert PT to ET`.
 2. Open Shortcut Details.
@@ -45,10 +68,6 @@ npm run build
 
 10. Add `Stop and Output` with the shell script result.
 11. In System Settings, assign a keyboard shortcut under `Keyboard > Keyboard Shortcuts > Services`.
-
-![Shortcut settings showing Use as Quick Action](setup-shortcut-add-quickaction.png)
-
-![macOS Keyboard Shortcuts settings showing the Shortcut assigned to a keyboard shortcut](mac-preferences-keyboard-shortcut.png)
 
 ## Change the Time Zones
 
