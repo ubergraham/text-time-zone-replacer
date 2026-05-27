@@ -7172,6 +7172,15 @@ function replaceTimeZoneText(input) {
   if (!trimmed) {
     throw new Error("No selected text was provided.");
   }
+  const lines = trimmed.split(/\r?\n/);
+  if (lines.length > 1) {
+    return lines.map((line) => {
+      const trimmedLine = line.trim();
+      return trimmedLine ? OUTPUT_ZONES.map(
+        (zone) => formatConvertedZone(trimmedLine, zone)
+      ).join(" / ") : line;
+    }).join("\n");
+  }
   return OUTPUT_ZONES.map((zone) => formatConvertedZone(trimmed, zone)).join(
     " / "
   );
