@@ -15,7 +15,7 @@ Weds 5pm
 becomes:
 
 ```text
-Weds 5pm PT / 8pm ET
+Weds 5pm (PT) / 8pm (ET)
 ```
 
 It also works with simple ranges:
@@ -27,7 +27,7 @@ Weds 4:30pm - 5pm
 becomes:
 
 ```text
-Weds 4:30pm - 5pm PT / 7:30pm-8pm ET
+Weds 4:30pm - 5pm (PT) / 7:30pm-8pm (ET)
 ```
 
 ## Which Version Should I Use?
@@ -125,7 +125,7 @@ Replace Selected Time Zones
 1. Type text like `Weds 5pm`.
 2. Select that text.
 3. Press your Raycast keyboard shortcut.
-4. The selected text should be replaced with `Weds 5pm PT / 8pm ET`.
+4. The selected text should be replaced with `Weds 5pm (PT) / 8pm (ET)`.
 
 macOS may ask Raycast for Accessibility or Automation permission. Allow it.
 Those permissions are needed so Raycast can copy and replace the selected text.
@@ -151,7 +151,7 @@ from this repository automatically.
 1. Type text like `Weds 5pm`.
 2. Select that text.
 3. Run the Shortcut using the keyboard shortcut you assigned.
-4. The selected text should be replaced with `Weds 5pm PT / 8pm ET`.
+4. The selected text should be replaced with `Weds 5pm (PT) / 8pm (ET)`.
 
 ## Changing the Time Zones
 
@@ -173,7 +173,7 @@ Near the top of either file, you will see:
 
 ```zsh
 SOURCE_ZONE="PT"
-OUTPUT_ZONES="PT,ET"
+OUTPUT_ZONES="PT, ET"
 ```
 
 `SOURCE_ZONE` means “how should the original text be interpreted?”
@@ -183,13 +183,13 @@ OUTPUT_ZONES="PT,ET"
 For example, to show Pacific, Eastern, and Central European Time:
 
 ```zsh
-OUTPUT_ZONES="PT,ET,CET"
+OUTPUT_ZONES="PT, ET, CET"
 ```
 
 That would produce output like:
 
 ```text
-Weds 5pm PT / 8pm ET / Thu 2am CET
+Weds 5pm (PT) / 8pm (ET) / Thu 2am (CET)
 ```
 
 Common aliases include `PT`, `ET`, `CT`, `MT`, `UTC`, `GMT`, `CET`, and `JST`.
@@ -210,7 +210,7 @@ Fri 11pm
 If the date crosses midnight in another time zone, the output includes the day:
 
 ```text
-Fri 11pm PT / Sat 2am ET
+Fri 11pm (PT) / Sat 2am (ET)
 ```
 
 ## Troubleshooting

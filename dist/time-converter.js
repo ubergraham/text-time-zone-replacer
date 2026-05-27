@@ -7117,9 +7117,9 @@ function compactDayTime(date, zone) {
 }
 function formatConvertedZone(input, zone, parsed) {
   if (zone.zone === SOURCE_ZONE) {
-    return `${input} ${zone.label}`;
+    return `${input} (${zone.label})`;
   }
-  return `${formatConvertedTime(parsed, zone.zone)} ${zone.label}`;
+  return `${formatConvertedTime(parsed, zone.zone)} (${zone.label})`;
 }
 function formatConvertedTime(parsed, targetZone) {
   if (parsed.isRange) {

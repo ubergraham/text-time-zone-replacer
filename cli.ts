@@ -108,10 +108,10 @@ function formatConvertedZone(
   parsed: ReturnType<typeof parseTimeInput>,
 ): string {
   if (zone.zone === SOURCE_ZONE) {
-    return `${input} ${zone.label}`;
+    return `${input} (${zone.label})`;
   }
 
-  return `${formatConvertedTime(parsed, zone.zone)} ${zone.label}`;
+  return `${formatConvertedTime(parsed, zone.zone)} (${zone.label})`;
 }
 
 function formatConvertedTime(

@@ -4,7 +4,7 @@ set -euo pipefail
 # Edit these to change how selected text is interpreted and rendered.
 # You can use short aliases such as PT, ET, CT, MT, UTC, GMT, CET, and JST.
 SOURCE_ZONE="PT"
-OUTPUT_ZONES="PT,ET"
+OUTPUT_ZONES="PT, ET"
 
 SCRIPT_DIR="${0:A:h}"
 cd "$SCRIPT_DIR"

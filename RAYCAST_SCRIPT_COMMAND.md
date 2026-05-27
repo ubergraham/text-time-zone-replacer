@@ -10,7 +10,7 @@ Weds 5pm
 becomes:
 
 ```text
-Weds 5pm PT / 8pm ET
+Weds 5pm (PT) / 8pm (ET)
 ```
 
 ## Setup
@@ -37,7 +37,7 @@ Edit the variables at the top of
 
 ```zsh
 SOURCE_ZONE="PT"
-OUTPUT_ZONES="PT,ET"
+OUTPUT_ZONES="PT, ET"
 ```
 
 `SOURCE_ZONE` controls how natural-language input is interpreted. For example,
@@ -47,7 +47,7 @@ OUTPUT_ZONES="PT,ET"
 time zone aliases, such as:
 
 ```zsh
-OUTPUT_ZONES="PT,ET,CET"
+OUTPUT_ZONES="PT, ET, CET"
 ```
 
 The source zone entry preserves the original selected text and adds its label.

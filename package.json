@@ -7,7 +7,7 @@
   "scripts": {
     "build": "esbuild cli.ts --bundle --platform=node --format=esm --outfile=dist/time-converter.js",
     "convert:selected": "TZ=America/Los_Angeles node dist/time-converter.js",
-    "test:examples": "printf 'Weds 5pm' | TZ=America/Los_Angeles node dist/time-converter.js"
+    "test:examples": "printf 'Weds 5pm' | node dist/time-converter.js"
   },
   "dependencies": {
     "chrono-node": "^2.8.4",

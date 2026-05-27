@@ -12,7 +12,7 @@ Weds 5pm
 becomes:
 
 ```text
-Weds 5pm PT / 8pm ET
+Weds 5pm (PT) / 8pm (ET)
 ```
 
 ## Before You Start
@@ -56,7 +56,7 @@ Near the top, you will see:
 
 ```zsh
 SOURCE_ZONE="PT"
-OUTPUT_ZONES="PT,ET"
+OUTPUT_ZONES="PT, ET"
 ```
 
 `SOURCE_ZONE` means “how should the original text be interpreted?”
@@ -66,7 +66,7 @@ OUTPUT_ZONES="PT,ET"
 For example, to show Pacific, Eastern, and Central European Time:
 
 ```zsh
-OUTPUT_ZONES="PT,ET,CET"
+OUTPUT_ZONES="PT, ET, CET"
 ```
 
 Common aliases include `PT`, `ET`, `CT`, `MT`, `UTC`, `GMT`, `CET`, and `JST`.
@@ -77,5 +77,5 @@ Advanced users can also use full time zone names like `Europe/London`.
 Select `Weds 5pm`, run the Quick Action, and macOS should replace it with:
 
 ```text
-Weds 5pm PT / 8pm ET
+Weds 5pm (PT) / 8pm (ET)
 ```
