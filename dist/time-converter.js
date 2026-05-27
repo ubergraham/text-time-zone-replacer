@@ -7041,25 +7041,72 @@ function parseFallback(input, reference) {
 }
 
 // cli.ts
-var SOURCE_ZONE = process.env.SOURCE_ZONE || "America/Los_Angeles";
+var TIME_ZONE_ALIASES = /* @__PURE__ */ new Map([
+  ["PT", "America/Los_Angeles"],
+  ["PST", "America/Los_Angeles"],
+  ["PDT", "America/Los_Angeles"],
+  ["PACIFIC", "America/Los_Angeles"],
+  ["ET", "America/New_York"],
+  ["EST", "America/New_York"],
+  ["EDT", "America/New_York"],
+  ["EASTERN", "America/New_York"],
+  ["CT", "America/Chicago"],
+  ["CST", "America/Chicago"],
+  ["CDT", "America/Chicago"],
+  ["CENTRAL", "America/Chicago"],
+  ["MT", "America/Denver"],
+  ["MST", "America/Denver"],
+  ["MDT", "America/Denver"],
+  ["MOUNTAIN", "America/Denver"],
+  ["AK", "America/Anchorage"],
+  ["AKST", "America/Anchorage"],
+  ["AKDT", "America/Anchorage"],
+  ["HT", "Pacific/Honolulu"],
+  ["HST", "Pacific/Honolulu"],
+  ["UTC", "Etc/UTC"],
+  ["GMT", "Europe/London"],
+  ["UK", "Europe/London"],
+  ["LONDON", "Europe/London"],
+  ["CET", "Europe/Paris"],
+  ["CEST", "Europe/Paris"],
+  ["PARIS", "Europe/Paris"],
+  ["BERLIN", "Europe/Berlin"],
+  ["CST-CHINA", "Asia/Shanghai"],
+  ["CHINA", "Asia/Shanghai"],
+  ["JST", "Asia/Tokyo"],
+  ["TOKYO", "Asia/Tokyo"],
+  ["AEST", "Australia/Sydney"],
+  ["AEDT", "Australia/Sydney"],
+  ["SYDNEY", "Australia/Sydney"]
+]);
+var SOURCE_ZONE = resolveTimeZone(
+  process.env.SOURCE_ZONE || "America/Los_Angeles"
+);
+process.env.TZ = SOURCE_ZONE;
 var OUTPUT_ZONES = parseOutputZones(
-  process.env.OUTPUT_ZONES || "PT=America/Los_Angeles,ET=America/New_York"
+  process.env.OUTPUT_ZONES || "PT=PT,ET=ET"
 );
 function readInput() {
   const argInput = process.argv.slice(2).join(" ").trim();
   if (argInput) return argInput;
   return readFileSync(0, "utf8").trim();
 }
+function resolveTimeZone(value) {
+  const trimmed = value.trim();
+  const alias = TIME_ZONE_ALIASES.get(trimmed.toUpperCase());
+  return alias || trimmed;
+}
 function parseOutputZones(value) {
   return value.split(/[;,]/).map((entry) => entry.trim()).filter(Boolean).map((entry) => {
     const [label, ...zoneParts] = entry.split("=");
-    const zone = zoneParts.join("=").trim();
-    if (!label?.trim() || !zone) {
+    const displayLabel = label.trim();
+    const zoneInput = zoneParts.length ? zoneParts.join("=").trim() : label;
+    if (!displayLabel || !zoneInput.trim()) {
       throw new Error(
-        `Invalid OUTPUT_ZONES entry "${entry}". Use LABEL=IANA_ZONE.`
+        `Invalid OUTPUT_ZONES entry "${entry}". Use LABEL=ZONE or ZONE.`
       );
     }
-    return { label: label.trim(), zone };
+    return { label: displayLabel, zone: resolveTimeZone(zoneInput) };
   });
 }
 function compactTime(date, zone) {

@@ -172,25 +172,28 @@ shortcut-quick-action.sh
 Near the top of either file, you will see:
 
 ```zsh
-SOURCE_ZONE="America/Los_Angeles"
-OUTPUT_ZONES="PT=America/Los_Angeles,ET=America/New_York"
+SOURCE_ZONE="PT"
+OUTPUT_ZONES="PT,ET"
 ```
 
 `SOURCE_ZONE` means “how should the original text be interpreted?”
 
 `OUTPUT_ZONES` means “which time zones should be shown?”
 
-For example, to show Pacific, Eastern, and London:
+For example, to show Pacific, Eastern, and Central European Time:
 
 ```zsh
-OUTPUT_ZONES="PT=America/Los_Angeles,ET=America/New_York,London=Europe/London"
+OUTPUT_ZONES="PT,ET,CET"
 ```
 
 That would produce output like:
 
 ```text
-Weds 5pm PT / 8pm ET / Thu 1am London
+Weds 5pm PT / 8pm ET / Thu 2am CET
 ```
+
+Common aliases include `PT`, `ET`, `CT`, `MT`, `UTC`, `GMT`, `CET`, and `JST`.
+Advanced users can also use full time zone names like `Europe/London`.
 
 ## What Text Works?
 

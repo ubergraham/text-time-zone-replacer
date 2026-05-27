@@ -2,9 +2,9 @@
 set -euo pipefail
 
 # Edit these to change how selected text is interpreted and rendered.
-# OUTPUT_ZONES is a comma-separated list of LABEL=IANA_TIME_ZONE entries.
-SOURCE_ZONE="America/Los_Angeles"
-OUTPUT_ZONES="PT=America/Los_Angeles,ET=America/New_York"
+# You can use short aliases such as PT, ET, CT, MT, UTC, GMT, CET, and JST.
+SOURCE_ZONE="PT"
+OUTPUT_ZONES="PT,ET"
 
 SCRIPT_DIR="${0:A:h}"
 cd "$SCRIPT_DIR"
@@ -21,5 +21,5 @@ if [[ -z "$NODE_BIN" ]]; then
   exit 1
 fi
 
-SOURCE_ZONE="$SOURCE_ZONE" OUTPUT_ZONES="$OUTPUT_ZONES" TZ="$SOURCE_ZONE" \
-  "$NODE_BIN" dist/time-converter.js
+SOURCE_ZONE="$SOURCE_ZONE" OUTPUT_ZONES="$OUTPUT_ZONES" "$NODE_BIN" \
+  dist/time-converter.js
