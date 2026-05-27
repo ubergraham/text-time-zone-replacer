@@ -36,11 +36,14 @@ There are two ways to install this.
 
 | Option | Best For | What You Need |
 | --- | --- | --- |
-| **Raycast Script Command** | Fastest and easiest day-to-day use if you already use Raycast | Raycast installed |
-| **macOS Shortcut** | Built-in Mac option without Raycast | Apple Shortcuts app |
+| **Option A: Raycast Script Command** | Fastest and easiest day-to-day use if you already use Raycast | Raycast and Node.js |
+| **Option B: macOS Shortcut** | Built-in Mac option without Raycast | Apple Shortcuts and Node.js |
 
 If you are unsure, use the **Raycast Script Command** version if you already
 have Raycast. Otherwise use the **macOS Shortcut** version.
+
+Both options use the same small JavaScript time converter, so **both options
+require Node.js**.
 
 ## Step 1: Download This Folder
 
@@ -60,7 +63,7 @@ your Raycast or Shortcut setup.
 ## Step 2: Install Node.js
 
 This tool needs Node.js because the time conversion code runs as a small
-JavaScript program.
+JavaScript program. This is true for both install options.
 
 Install Node.js from:
 
@@ -87,11 +90,13 @@ npm run build
 
 You only need to do this once, unless you later update the code.
 
-## Step 4: Choose an Install Option
+## Step 4: Choose One Install Path
 
-Choose one of the two options below.
+At this point, choose **one** of the two install paths below.
 
-## Option 1: Raycast Script Command
+You do not need to set up both.
+
+## Option A: Raycast Script Command
 
 This is the fastest option.
 
@@ -132,7 +137,7 @@ Those permissions are needed so Raycast can copy and replace the selected text.
 
 More details are in [RAYCAST_SCRIPT_COMMAND.md](RAYCAST_SCRIPT_COMMAND.md).
 
-## Option 2: macOS Shortcut
+## Option B: macOS Shortcut
 
 Use this if you do not use Raycast.
 
