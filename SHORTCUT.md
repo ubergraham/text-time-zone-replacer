@@ -41,8 +41,12 @@ npm run build
 /path/to/text-time-zone-replacer/shortcut-quick-action.sh
 ```
 
+![Shortcut setup showing the Run Shell Script action](setup-shortcut.png)
+
 10. Add `Stop and Output` with the shell script result.
 11. In System Settings, assign a keyboard shortcut under `Keyboard > Keyboard Shortcuts > Services`.
+
+![Shortcut settings showing Use as Quick Action](setup-shortcut-add-quickaction.png)
 
 ## Change the Time Zones
 
@@ -79,3 +83,5 @@ Select `Weds 5pm`, run the Quick Action, and macOS should replace it with:
 ```text
 Weds 5pm (PT) / 8pm (ET)
 ```
+
+![Using the Shortcut to replace selected text](use-shortcut.png)

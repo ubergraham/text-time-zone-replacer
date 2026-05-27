@@ -148,6 +148,10 @@ Services menu and can be assigned a keyboard shortcut.
 
 Open [SHORTCUT.md](SHORTCUT.md) and follow the steps there.
 
+![Shortcut setup showing the Run Shell Script action](setup-shortcut.png)
+
+![Shortcut settings showing Use as Quick Action](setup-shortcut-add-quickaction.png)
+
 The setup is more manual than Raycast because Apple Shortcuts does not install
 from this repository automatically.
 
@@ -157,6 +161,8 @@ from this repository automatically.
 2. Select that text.
 3. Run the Shortcut using the keyboard shortcut you assigned.
 4. The selected text should be replaced with `Weds 5pm (PT) / 8pm (ET)`.
+
+![Using the Shortcut to replace selected text](use-shortcut.png)
 
 ## Changing the Time Zones
 
