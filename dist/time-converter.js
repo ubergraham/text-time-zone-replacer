@@ -7122,6 +7122,23 @@ function compactTime(date, zone) {
 function compactDayTime(date, zone) {
   return formatInTimeZone(date, zone, "EEE h:mma").replace(":00", "").toLowerCase().replace(/^\w/, (c) => c.toUpperCase());
 }
+function compactRangeTime(date, zone) {
+  return compactTime(date, zone).replace("am", "a").replace("pm", "p");
+}
+function compactRangeDayTime(date, zone) {
+  return compactDayTime(date, zone).replace("am", "a").replace("pm", "p");
+}
+function meridiemSuffix(date, zone) {
+  return formatInTimeZone(date, zone, "a").toLowerCase();
+}
+function stripMeridiemSuffix(value) {
+  return value.replace(/([ap])m?$/i, "");
+}
+function formatAllZones(input) {
+  return OUTPUT_ZONES.map((zone) => formatConvertedZone(input, zone)).join(
+    " / "
+  );
+}
 function formatConvertedZone(input, zone) {
   if (zone.zone === SOURCE_ZONE) {
     return `${input} (${zone.label})`;
@@ -7159,8 +7176,11 @@ function formatConvertedTime(parsed, targetZone) {
     );
     const showStartDay = sourceStartDay !== targetStartDay;
     const showEndDay = sourceEndDay !== targetEndDay || targetStartDay !== targetEndDay;
-    const start = showStartDay ? compactDayTime(parsed.date, targetZone) : compactTime(parsed.date, targetZone);
-    const end = showEndDay ? compactDayTime(parsed.endDate, targetZone) : compactTime(parsed.endDate, targetZone);
+    let start = showStartDay ? compactRangeDayTime(parsed.date, targetZone) : compactRangeTime(parsed.date, targetZone);
+    const end = showEndDay ? compactRangeDayTime(parsed.endDate, targetZone) : compactRangeTime(parsed.endDate, targetZone);
+    if (!showStartDay && !showEndDay && meridiemSuffix(parsed.date, targetZone) === meridiemSuffix(parsed.endDate, targetZone)) {
+      start = stripMeridiemSuffix(start);
+    }
     return `${start}-${end}`;
   }
   const sourceDay = formatInTimeZone(parsed.date, SOURCE_ZONE, "yyyy-MM-dd");
@@ -7176,14 +7196,14 @@ function replaceTimeZoneText(input) {
   if (lines.length > 1) {
     return lines.map((line) => {
       const trimmedLine = line.trim();
-      return trimmedLine ? OUTPUT_ZONES.map(
-        (zone) => formatConvertedZone(trimmedLine, zone)
-      ).join(" / ") : line;
+      return trimmedLine ? replaceTimeZoneText(trimmedLine) : line;
     }).join("\n");
   }
-  return OUTPUT_ZONES.map((zone) => formatConvertedZone(trimmed, zone)).join(
-    " / "
-  );
+  const alternatives = trimmed.split(ALTERNATIVE_SEPARATOR_RE).map((part) => part.trim()).filter(Boolean);
+  if (alternatives.length > 1) {
+    return alternatives.map((part) => formatAllZones(part)).join(" or ");
+  }
+  return formatAllZones(trimmed);
 }
 function main() {
   const input = readInput();
