@@ -4,6 +4,7 @@
 # @raycast.title Replace Selected Time Zones
 # @raycast.mode silent
 # @raycast.packageName Text Time Zone Replacer
+# @raycast.icon ⏳
 # @raycast.description Replace selected natural-language time text with configured time zone conversions.
 
 set -euo pipefail
